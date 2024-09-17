@@ -13,15 +13,16 @@ void AMatchGameMode::BeginPlay()
 
 	TArray<AArenaPlayerStart*> PlayerStartsPoints;
 	FindPlayerStartActorsInArena(PlayerStartsPoints);
-
-	for (AArenaPlayerStart* PlayerStartPoint : PlayerStartsPoints)
-	{
-		EAutoReceiveInput::Type InputType = PlayerStartPoint->AutoReceiveInput.GetValue();
-		TSubclassOf<ASmashCharacter> SmashCharacterClass = GetSmashCharacterClassFromInputType(InputType);
-		if(SmashCharacterClass == nullptr) continue;
-		
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, SmashCharacterClass->GetFName().ToString());
-	}
+	SpawnCharacter(PlayerStartsPoints);
+	
+	//for (AArenaPlayerStart* PlayerStartPoint : PlayerStartsPoints)
+	//{
+	//	EAutoReceiveInput::Type InputType = PlayerStartPoint->AutoReceiveInput.GetValue();
+	//	TSubclassOf<ASmashCharacter> SmashCharacterClass = GetSmashCharacterClassFromInputType(InputType);
+	//	if(SmashCharacterClass == nullptr) continue;
+	//	
+	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, SmashCharacterClass->GetFName().ToString());
+	//}
 }
 
 void AMatchGameMode::FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*>& ResultActors)
@@ -35,6 +36,27 @@ void AMatchGameMode::FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*>& Re
 
 		ResultActors.Add(ArenaPlayerStartActor);
 	}
+}
+
+void AMatchGameMode::SpawnCharacter(const TArray<AArenaPlayerStart*>& SpawnPoints)
+{
+	for(AArenaPlayerStart* SpawnPoint : SpawnPoints)
+	{
+		EAutoReceiveInput::Type InputType = SpawnPoint->AutoReceiveInput.GetValue();
+		TSubclassOf<ASmashCharacter> SmashCharacterClass = GetSmashCharacterClassFromInputType(InputType);
+		if(SmashCharacterClass == nullptr) continue;
+
+		ASmashCharacter* NewCharacter = GetWorld()->SpawnActorDeferred<ASmashCharacter>(
+			SmashCharacterClass,
+			SpawnPoint->GetTransform());
+
+		if(NewCharacter == nullptr) continue;
+		NewCharacter->AutoPossessPlayer = SpawnPoint->AutoReceiveInput;
+		NewCharacter->FinishSpawning(SpawnPoint->GetTransform());
+
+		CharactersInsideArena.Add(NewCharacter);
+	}
+	
 }
 
 TSubclassOf<ASmashCharacter> AMatchGameMode::GetSmashCharacterClassFromInputType( EAutoReceiveInput::Type InputType) const
