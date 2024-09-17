@@ -22,7 +22,7 @@ class SMASHUE_API AMatchGameMode : public AGameModeBase
 	protected:
 	UPROPERTY()
 	TArray<ASmashCharacter*> CharactersInsideArena;
-	UPROPERTY(EditAnywhere)
+	/*UPROPERTY(EditAnywhere)
 	TSubclassOf<ASmashCharacter> SmashCharacterClassP0;
 
 	UPROPERTY(EditAnywhere)
@@ -33,7 +33,7 @@ class SMASHUE_API AMatchGameMode : public AGameModeBase
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ASmashCharacter> SmashCharacterClassP3;
-	
+	*/
 
 	private:
 		void FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*> & ResultActors);
