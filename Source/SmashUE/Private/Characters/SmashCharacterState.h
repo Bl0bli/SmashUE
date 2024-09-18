@@ -6,8 +6,6 @@
 #include "Characters/SmashCharacterStateID.h"
 #include "Components/ActorComponent.h"
 #include "SmashCharacterState.generated.h"
-
-class USmashCharacterState;
 class ASmashCharacter;
 class USmashCharacterStateMachine;
 UCLASS(Abstract)
@@ -28,9 +26,5 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<USmashCharacterStateMachine> StateMachine;
-
-	TArray<USmashCharacterState*> AllStates;
-
-	void FindStates();
-	void InitStates();
+	
 };

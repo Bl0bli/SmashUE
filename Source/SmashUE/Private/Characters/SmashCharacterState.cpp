@@ -3,6 +3,7 @@
 
 #include "SmashCharacterState.h"
 
+#include "Characters/SmashCharacter.h"
 #include "Characters/SmashCharacterStateMachine.h"
 
 
@@ -28,10 +29,12 @@ void USmashCharacterState::StateInit(USmashCharacterStateMachine* InStateMachine
 	GEngine->AddOnScreenDebugMessage(
 		-1,
 		3.f,
-		FColor::Cyan,
+		FColor::Magenta,
 		FString::Printf(TEXT("Init State %d"), GetStateID())
 		);
 }
+
+
 
 
 

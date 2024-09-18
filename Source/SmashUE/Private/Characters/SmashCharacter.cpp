@@ -18,7 +18,7 @@ void ASmashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	CreateStateMachine();
-	InitializeComponents();
+	InitStateMachine();
 }
 
 // Called every frame
