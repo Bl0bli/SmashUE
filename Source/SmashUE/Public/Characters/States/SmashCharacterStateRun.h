@@ -3,23 +3,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EngineUtils.h"
 #include "Characters/SmashCharacterState.h"
-#include "SmashCharacterStateIdle.generated.h"
+#include "SmashCharacterStateRun.generated.h"
 
 
-UCLASS(ClassGroup=(SmashCharacterState), meta=(BlueprintSpawnableComponent))
-class SMASHUE_API USmashCharacterStateIdle : public USmashCharacterState
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+class SMASHUE_API USmashCharacterStateRun : public USmashCharacterState
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	virtual ESmashCharacterStateID GetStateID() override;
 	virtual void StateEnter(ESmashCharacterStateID PreviousStateID) override;
 	virtual void StateExit(ESmashCharacterStateID NextStateID) override;
 	virtual void StateTick(float DeltaTime) override;
 	
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<UAnimMontage> AnimMontageIdle;
+	TObjectPtr<UAnimMontage> AnimMontageRun;
+	UPROPERTY(EditAnywhere)
+	float MoveSpeedMax = 45.f;
 };

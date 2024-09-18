@@ -7,7 +7,7 @@
 #include "SmashCharacter.generated.h"
 
 class USmashCharacterStateMachine;
-
+class UAnimMontage;
 UCLASS()
 class SMASHUE_API ASmashCharacter : public ACharacter
 {
@@ -47,6 +47,7 @@ protected:
 	public:
 	void CreateStateMachine();
 	void InitStateMachine();
+	void TickStateMachine(float DeltaTime) const;
 
 	protected:
 	UPROPERTY(BlueprintReadOnly)
