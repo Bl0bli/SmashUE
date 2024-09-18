@@ -6,6 +6,7 @@
 #include "Arena/ArenaPlayerStart.h"
 #include "Arena/ArenaSettings.h"
 #include "Characters/SmashCharacter.h"
+#include "Characters/SmashCharacterState.h"
 #include "Kismet/GameplayStatics.h"
 
 void AMatchGameMode::BeginPlay()
@@ -24,6 +25,20 @@ void AMatchGameMode::BeginPlay()
 	//	
 	//	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, SmashCharacterClass->GetFName().ToString());
 	//}
+}
+
+USmashCharacterInputData* AMatchGameMode::LoadInputDataFromConfig()
+{
+	const USmashCharacterSettings* CharacterSettings = GetDefault<USmashCharacterSettings>();
+	if(CharacterSettings == nullptr) return nullptr;
+	return CharacterSettings->InputData.LoadSynchronous();
+}
+
+UInputMappingContext* AMatchGameMode::LoadInputMappingContextFromConfig()
+{
+	const USmashCharacterSettings* CharacterSettings = GetDefault<USmashCharacterSettings>();
+	if (CharacterSettings == nullptr) return nullptr;
+	return CharacterSettings->InputMappingContext.LoadSynchronous();
 }
 
 void AMatchGameMode::FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*>& ResultActors)
