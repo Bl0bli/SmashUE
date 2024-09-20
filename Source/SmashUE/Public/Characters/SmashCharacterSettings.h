@@ -8,9 +8,6 @@
 #include "Engine/DeveloperSettings.h"
 #include "SmashCharacterSettings.generated.h"
 
-/**
- * 
- */
 UCLASS(Config=Game, DefaultConfig, meta= (DisplayName = "Smash Character Settings"))
 class SMASHUE_API USmashCharacterSettings : public UDeveloperSettings
 {

@@ -56,6 +56,8 @@ void AMatchGameMode::FindPlayerStartActorsInArena(TArray<AArenaPlayerStart*>& Re
 
 void AMatchGameMode::SpawnCharacter(const TArray<AArenaPlayerStart*>& SpawnPoints)
 {
+	USmashCharacterInputData* InputData = LoadInputDataFromConfig();
+	UInputMappingContext* InputMappingContext = LoadInputMappingContextFromConfig();
 	for(AArenaPlayerStart* SpawnPoint : SpawnPoints)
 	{
 		EAutoReceiveInput::Type InputType = SpawnPoint->AutoReceiveInput.GetValue();
@@ -67,6 +69,8 @@ void AMatchGameMode::SpawnCharacter(const TArray<AArenaPlayerStart*>& SpawnPoint
 			SpawnPoint->GetTransform());
 
 		if(NewCharacter == nullptr) continue;
+		NewCharacter->InputData = InputData;
+		NewCharacter->InputMappingContext = InputMappingContext;
 		NewCharacter->AutoPossessPlayer = SpawnPoint->AutoReceiveInput;
 		NewCharacter->SetOrientX(SpawnPoint->GetStartOrientX());
 		NewCharacter->FinishSpawning(SpawnPoint->GetTransform());

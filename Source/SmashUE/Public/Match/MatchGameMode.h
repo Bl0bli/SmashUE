@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "InputMappingContext.h"
 #include "MatchGameMode.generated.h"
 
-class UInputMappingContext;
+
 class USmashCharacterInputData;
 class ASmashCharacter;
 class AArenaPlayerStart;
