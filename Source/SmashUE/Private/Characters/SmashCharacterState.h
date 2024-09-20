@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Characters/SmashCharacterSettings.h"
 #include "Characters/SmashCharacterStateID.h"
 #include "Components/ActorComponent.h"
 #include "SmashCharacterState.generated.h"
+class USmashCharacterSettings;
 class ASmashCharacter;
 class USmashCharacterStateMachine;
 UCLASS(Abstract)
@@ -29,5 +31,8 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<USmashCharacterStateMachine> StateMachine;
+
+	UPROPERTY()
+	const USmashCharacterSettings* Settings ;	
 	
 };

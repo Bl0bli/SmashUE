@@ -17,6 +17,9 @@ public:
 	virtual void StateEnter(ESmashCharacterStateID PreviousStateID) override;
 	virtual void StateExit(ESmashCharacterStateID NextStateID) override;
 	virtual void StateTick(float DeltaTime) override;
+
+	UFUNCTION()
+	void OnInputMoveXFast(float X);
 	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UAnimMontage> AnimMontageWalk;

@@ -4,6 +4,7 @@
 #include "Characters/States/SmashCharacterStateWalk.h"
 
 #include "Characters/SmashCharacter.h"
+#include "Characters/SmashCharacterStateMachine.h"
 
 ESmashCharacterStateID USmashCharacterStateWalk::GetStateID()
 {
@@ -21,6 +22,7 @@ void USmashCharacterStateWalk::StateEnter(ESmashCharacterStateID PreviousStateID
 		TEXT("Enter StateWalk")
 		);
 	Character->PlayAnimMontage(AnimMontageWalk);
+	Character->InputMoveXFastEvent.AddDynamic(this, &USmashCharacterStateWalk::OnInputMoveXFast);
 }
 
 void USmashCharacterStateWalk::StateExit(ESmashCharacterStateID NextStateID)
@@ -33,6 +35,7 @@ void USmashCharacterStateWalk::StateExit(ESmashCharacterStateID NextStateID)
 	TEXT("Exit StateWalk")
 	);
 	Character->AddMovementInput(FVector(Character->GetOrientX()),0);
+	Character->InputMoveXFastEvent.RemoveDynamic(this, &USmashCharacterStateWalk::OnInputMoveXFast);
 }
 
 void USmashCharacterStateWalk::StateTick(float DeltaTime)
@@ -44,5 +47,27 @@ void USmashCharacterStateWalk::StateTick(float DeltaTime)
 		FColor::Green,
 		TEXT("Tick StateWalk")
 	);
-	Character->AddMovementInput(Character->GetActorForwardVector() * MoveSpeedMax * DeltaTime);
+
+	if(FMath::Abs(Character->GetInputJump()) > Settings->InputJumpThreshold)
+	{
+		StateMachine->ChangeState(ESmashCharacterStateID::Jump);
+	}
+	else if(FMath::Abs(Character->GetInputMoveX()) < Settings->InputMoveXThreshold)
+	{
+		StateMachine->ChangeState(ESmashCharacterStateID::Idle);
+	}
+
+
+	
+	else
+	{
+		Character->SetOrientX(Character->GetInputMoveX());
+		Character->AddMovementInput(FVector::ForwardVector,  Character->GetOrientX() * MoveSpeedMax * DeltaTime);
+	}
+
+}
+
+void USmashCharacterStateWalk::OnInputMoveXFast(float X)
+{
+	StateMachine->ChangeState(ESmashCharacterStateID::Run);
 }

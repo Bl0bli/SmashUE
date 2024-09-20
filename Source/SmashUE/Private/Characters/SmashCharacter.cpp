@@ -40,6 +40,12 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	SetupMappingContextIntoController();
+
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (EnhancedInputComponent == nullptr) return;
+
+	BindInputMoveXAxisAndActions(EnhancedInputComponent);
+	BindInputJump(EnhancedInputComponent);
 }
 
 float ASmashCharacter::GetOrientX() const
@@ -91,6 +97,60 @@ void ASmashCharacter::SetupMappingContextIntoController() const
 	if(InputSystem == nullptr) return;
 
 	InputSystem->AddMappingContext(InputMappingContext, 0);
+}
+
+float ASmashCharacter::GetInputMoveX() const
+{
+	return InputMoveX;
+}
+
+float ASmashCharacter::GetInputJump() const
+{
+	return InputJump;
+}
+
+void ASmashCharacter::OnInputMoveX(const FInputActionValue& InputActionValue)
+{
+	InputMoveX = InputActionValue.Get<float>();
+}
+
+void ASmashCharacter::OnInputMoveXFast(const FInputActionValue& InputActionValue)
+{
+	InputMoveX = InputActionValue.Get<float>();
+	InputMoveXFastEvent.Broadcast(InputMoveX);
+}
+
+void ASmashCharacter::OnInputJump(const FInputActionValue& InputActionValue)
+{
+	InputJump = InputActionValue.Get<float>();
+}
+
+void ASmashCharacter::BindInputMoveXAxisAndActions(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if(InputData == nullptr) return;
+
+	if(InputData->InputActionMoveX)
+	{
+		EnhancedInputComponent->BindAction(InputData->InputActionMoveX, ETriggerEvent::Started, this, &ASmashCharacter::OnInputMoveX);
+		EnhancedInputComponent->BindAction(InputData->InputActionMoveX, ETriggerEvent::Triggered, this, &ASmashCharacter::OnInputMoveX);
+		EnhancedInputComponent->BindAction(InputData->InputActionMoveX, ETriggerEvent::Completed, this, &ASmashCharacter::OnInputMoveX);
+
+	}
+	if(InputData->InputActionMoveXFast)
+	{
+		EnhancedInputComponent->BindAction(InputData->InputActionMoveXFast, ETriggerEvent::Triggered, this, &ASmashCharacter::OnInputMoveXFast);
+	}
+
+}
+
+void ASmashCharacter::BindInputJump(UEnhancedInputComponent* EnhancedInputComponent)
+{
+	if(InputData == nullptr) return;
+	if(InputData->InputActionJump)
+	{
+		EnhancedInputComponent->BindAction(InputData->InputActionJump, ETriggerEvent::Started, this, &ASmashCharacter::OnInputJump);
+		EnhancedInputComponent->BindAction(InputData->InputActionJump, ETriggerEvent::Completed, this, &ASmashCharacter::OnInputJump);
+	}
 }
 
 
